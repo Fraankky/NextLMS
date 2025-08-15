@@ -30,13 +30,61 @@ model User {
   role Role @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  verificationCode VerificationCode?
+  certificate Certificate[]
 }
 
-model VerificationCode {
+model Course {
   id String @id @default(cuid())
-  code String
-  userId String @unique
+  title String
+  slug String
+  description String
+  price Int
+  coverImage String
+  isPublished Boolean @default(false)
+  sections Section[]
+  certificate Certificate[]
+  flashsale Flashsale?
+}
+
+model Section {
+  id String @id @default(cuid())
+  title String
+  index Int @default(0)
+  courseId String
+  course Course @relation(fields: [courseId], references: [id])
+  lessons Lesson[]
+}
+
+model Lesson{
+  id String @id @default(cuid())
+  title String
+  slug String
+  videoUrl String
+  index Int @default(0)
+  isPreview Boolean @default(false)
+  sectionId String
+
+  section Section @relation(fields: [sectionId], references: [id])
+}
+
+model Flashsale{
+  id String @id @default(cuid())
+  newAmount Int
+  courseId String @unique
+  course Course @relation(fields: [courseId], references: [id])
+}
+
+enum RequestStatus {
+  UNDER_REVIEW
+  APPROVED
+  NO_REQUEST
+}
+
+model Certificate {
+  id String @id @default(cuid())
+  courseId String
+  course Course @relation(fields: [courseId], references: [id])
+  userId String 
   user User @relation(fields: [userId], references: [id])
-  createdAt DateTime @default(now())
+  status RequestStatus @default(NO_REQUEST)
 }
