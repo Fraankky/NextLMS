@@ -18,11 +18,17 @@ export const UserServices = {
       },
     })
   },
-  findUser: async (email: string) => {
-    return await prisma.user.findUnique({
-      where: {
-        email: email,
-      },
-    });
-  },
+  findUser: async (userId: string) => {
+    try {
+      const user = await prisma.user.findUnique({
+        where: { id: userId }
+      });
+      console.log("Finding user with ID:", userId);
+      console.log("User found:", user);
+      return user;
+    } catch (error) {
+      console.error("Error finding user:", error);
+      return null;
+    }
+  }
 };

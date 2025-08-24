@@ -36,7 +36,6 @@ export const CourseServices = {
             }
         })
     },
-
     createLesson: async(sectionId: string) => {
         const totalLesson = await prisma.lesson.count({
             where: {
@@ -54,12 +53,14 @@ export const CourseServices = {
             }
         })
     },
-
     getAllCourses: async () => {
     const data = await prisma.course.findMany({
         orderBy: {
             title: "asc",
         },
+        include: {
+            flashsale: true,
+        }
     })
 
     return data;
@@ -78,6 +79,7 @@ export const CourseServices = {
                 ],
             },
             include: {
+                flashsale: true,
                 sections: {
                     include: {
                         lessons: {

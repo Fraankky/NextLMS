@@ -124,7 +124,7 @@
     font-size: 15px;
   }
   h1 {
-    @apply text-8xl font-semibold tracking-tighter
+    @apply text-6xl font-semibold tracking-tighter
   }
   h2 {
     @apply text-4xl font-medium tracking-tighter

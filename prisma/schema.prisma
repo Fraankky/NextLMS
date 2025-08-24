@@ -31,6 +31,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   certificate Certificate[]
+  transactions Transaction[]
 }
 
 model Course {
@@ -44,6 +45,7 @@ model Course {
   sections Section[]
   certificate Certificate[]
   flashsale Flashsale?
+  transactions Transaction[]
 }
 
 model Section {
@@ -87,4 +89,23 @@ model Certificate {
   userId String 
   user User @relation(fields: [userId], references: [id])
   status RequestStatus @default(NO_REQUEST)
+}
+
+enum PaymentStatus {
+  PAID
+  UNPAID
+}
+
+model Transaction {
+  id String @id @default(cuid())
+  amount Int
+  paymentStatus PaymentStatus @default(UNPAID)
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  courseId String
+  course Course @relation(fields: [courseId], references: [id])
+  paymentLink String
+  transactionId String @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
